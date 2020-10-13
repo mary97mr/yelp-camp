@@ -25,17 +25,23 @@
     letter-spacing: 3px;
     font-family: 'Roboto Mono', monospace;
 }
+
 .form-comment {
     font-size: 1.3em;
 }
+
 body {
-    background-color: gray;
+    background-color: #d9d9d9;
 }
 
 label {
     margin-left: 5px;
     color: #669999;
     margin-bottom: 0;
+}
+
+.card {
+    height: ;
 }
 
 .delete-form {
