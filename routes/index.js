@@ -10,10 +10,11 @@ router.get("/", function(req, res) {
     res.render("landing");
 });
 
-// =====================
+// ================
 // REGISTER ROUTES
+// ================
 
-// Show register Form
+// Shows register Form
 router.get("/register", function(req, res) {
     res.render("register", {page: "register"});
 });
@@ -33,10 +34,11 @@ router.post("/register", function(req, res) {
     });
 });
 
-// =====================
+// =============
 // LOGIN ROUTES
+// =============
 
-// Show Login Form
+// Shows Login Form
 router.get("/login", function(req, res) {
     res.render("login", {page: "login"});
 });
@@ -48,8 +50,9 @@ router.post("/login",passport.authenticate("local", {
 }), function(req, res) {
 });
 
-// =====================
+// ==============
 // LOGOUT ROUTES
+// ==============
 
 router.get("/logout", function(req, res) {
     req.logout();

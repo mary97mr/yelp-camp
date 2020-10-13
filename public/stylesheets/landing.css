@@ -15,8 +15,8 @@ body {
 }
 
 hr {
-	color: white;
-	width: 80%;
+	width: 450px;
+	border-top: 1.5px solid rgba(255, 255, 255, .3);
 }
 
 .slideshow { 

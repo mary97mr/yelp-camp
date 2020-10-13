@@ -14,17 +14,20 @@
     border-radius: 10px;
 }
 
-.form-header {
+.form-header, .form-comment {
     text-align: center;
     text-transform: uppercase;
     color: #669999;
     margin: 10px auto;
     margin-bottom: 40px;
+    margin-top: 40px;
     font-size: 2.3em;
     letter-spacing: 3px;
     font-family: 'Roboto Mono', monospace;
 }
-
+.form-comment {
+    font-size: 1.3em;
+}
 body {
     background-color: gray;
 }
@@ -33,10 +36,6 @@ label {
     margin-left: 5px;
     color: #669999;
     margin-bottom: 0;
-}
-
-.card-body {
-    padding: 9px;
 }
 
 .delete-form {

@@ -17,11 +17,10 @@
 		<!-- Font Family -->
 		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
 
-
         <title>YelpCamp</title>
     </head>
     <body>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
 			<a class="navbar-brand" href="/">YelpCamp</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
 			</button>
@@ -31,7 +30,7 @@
 						<a class="<%= typeof page !== 'undefined' && page === 'campgrounds' ? 'active' : '' %> nav-link" href="/campgrounds">Home</a>
 					</li>
 				</ul>
-				<ul class="nav navbar-nav ">
+				<ul class="nav navbar-nav">
 					<% if(!currentUser) { %>
 						<li class="nav-item">
 							<a class="<%= typeof page !== 'undefined' && page === 'login' ? 'active' : '' %> nav-link" href="/login">Login</a>

@@ -26,12 +26,12 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const flash = require("connect-flash");
 
-// requiring models (collections)
+// Requiring Models
 const Campground = require("./models/campground");
 const Comment = require("./models/comment");
 const User = require("./models/user");
 
-// requiring routes
+// Requiring All Routes
 const campgroundRoutes = require("./routes/campgrounds");
 const commentRoutes = require("./routes/comments");
 const indexRoutes = require("./routes/index");
@@ -55,14 +55,13 @@ passport.deserializeUser(User.deserializeUser());
 
 // seedDB(); //seed database
 
-// Passing Variables to all the templates
+// Passing variables to all the templates
 app.use(function(req, res, next) {
     res.locals.currentUser = req.user;
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
     next();
 });
-
 app.locals.moment = require("moment");
 
 // Using All the templates of the routes

@@ -14,10 +14,9 @@ var options = {
 var geocoder = NodeGeocoder(options);
 
 
-// INDEX- show all campgrounds
+// INDEX- Show all campgrounds
 
 router.get("/", function(req, res) {
-    // Get all campgrounds from DB
     Campground.find({}, function(err, allCampgrounds){
         if(err) {
             console.log(err);
@@ -78,6 +77,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
 });
 
 // SHOW - Displays more info of one campground
+
 router.get("/:id", function(req, res) {
     // find the campground with provided ID
     Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground) {
@@ -90,7 +90,7 @@ router.get("/:id", function(req, res) {
     });
 });
 
-// EDIT - Display a form to edit one campground
+// EDIT - Displays a form to edit one campground
 
 router.get("/:id/edit", middleware.checkCampgroundOwnership, function(req, res) {
     Campground.findById(req.params.id, function(err, foundCampground) {
