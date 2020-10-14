@@ -2,7 +2,6 @@ var express = require("express");
 var router = express.Router();
 
 const passport = require("passport");
-const user = require("../models/user");
 const User = require("../models/user");
 
 // Root Route
@@ -22,13 +21,16 @@ router.get("/register", function(req, res) {
 // handdle sign up logic
 router.post("/register", function(req, res) {
     var newUser = new User({username: req.body.username});
+    if(req.body.adminCode === "secretcode123") {
+        newUser.isAdmin = true;
+    }
     User.register(newUser, req.body.password, function(err, userCreated) {
         if(err) {
             console.log(err);
             return res.render("register", {error: err.message});
         }
         passport.authenticate("local")(req, res, function() {
-            req.flash("success", "Welcome to yelpCamp " + user.username);
+            req.flash("success", "Welcome to yelpCamp " + userCreated.username);
             res.redirect("/campgrounds");
         });
     });
