@@ -40,6 +40,11 @@ label {
     margin-bottom: 0;
 }
 
+.info-pro {
+    font-family: 'Roboto Mono', monospace;
+    color: #669999;
+}
+
 .card {
     border: 1px solid rgba(0,0,0,.25);
 }
@@ -48,9 +53,16 @@ label {
     display: inline;
 }
 
-.fa-user, .fa-lock {
+.fa-user, .fa-lock, .fa-at, .fa-envelope {
     font-size: 1.8em;
     margin-right: 25px;
+    margin-top: 5px;
+    color: gray;
+}
+
+.fa-at {
+    font-size: 1.8em;
+    margin-right: 22px;
     margin-top: 5px;
     color: gray;
 }
