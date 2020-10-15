@@ -1,0 +1,23 @@
+<%- include("partials/header") %> 
+
+<div class="row">
+    <div class="col"></div>
+    <div class="col-lg-5 col-md-8 form-style">
+        <h1 class="form-header">forgot password</h1>
+        <div>
+            <form action="/forgot" method="POST">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input class="form-control" type="email" name="email" autofocus>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Reset Password" class="btn btn-info">
+                </div>
+            </form>
+            <a href="/login">Go back</a>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+<%- include("partials/footer") %> 
