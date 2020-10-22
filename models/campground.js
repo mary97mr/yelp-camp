@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+var mongoose = require("mongoose");
 
-const campgroundSchema = new mongoose.Schema({
+var campgroundSchema = new mongoose.Schema({
     name: String,
     price: Number,
     img: String,

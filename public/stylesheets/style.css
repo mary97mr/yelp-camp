@@ -66,3 +66,9 @@ label {
     margin-top: 5px;
     color: gray;
 }
+
+.follow {
+    border-radius: 10px;
+    background-color: #669999;
+    color: white;
+}
