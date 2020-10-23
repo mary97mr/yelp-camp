@@ -1,9 +1,9 @@
 var express = require("express");
 var router = express.Router();
 
-const passport = require("passport");
-const User = require("../models/user");
-const Campground = require("../models/campground");
+var passport = require("passport");
+var User = require("../models/user");
+var Campground = require("../models/campground");
 
 var async = require("async");
 var nodemailer = require("nodemailer");

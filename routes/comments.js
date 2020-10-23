@@ -1,8 +1,8 @@
 var express = require("express");
 var router = express.Router({mergeParams: true});
-const middleware = require("../middleware");
-const Campground = require("../models/campground");
-const Comment = require("../models/comment");
+var middleware = require("../middleware");
+var Campground = require("../models/campground");
+var Comment = require("../models/comment");
 
 //  NEW - Displays a form to create a new Comment.
 

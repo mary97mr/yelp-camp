@@ -1,12 +1,12 @@
 require('dotenv').config();
 
 var express = require("express");
-var app = express();
+var app     = express();
 
-const methodOverride = require("method-override");
+var methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 
-const mongoose = require("mongoose");
+var mongoose = require("mongoose");
 mongoose.connect('mongodb://localhost/yelp_camp', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -21,24 +21,24 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.locals.moment = require("moment");
 
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
-const flash = require("connect-flash");
+var passport      = require("passport");
+var LocalStrategy = require("passport-local");
+var flash         = require("connect-flash");
 
 // Requiring Models
-const Campground = require("./models/campground");
-const Comment = require("./models/comment");
-const User = require("./models/user");
+var Campground = require("./models/campground");
+var Comment    = require("./models/comment");
+var User       = require("./models/user");
 
 // Requiring All Routes
-const campgroundRoutes = require("./routes/campgrounds");
-const commentRoutes = require("./routes/comments");
-const indexRoutes = require("./routes/index");
-const seedDB = require("./seeds");
+var campgroundRoutes = require("./routes/campgrounds");
+var commentRoutes    = require("./routes/comments");
+var indexRoutes      = require("./routes/index");
+var seedDB           = require("./seeds");
 
 // PASSPORT CONFIGURATION
-
 app.use(require("express-session")({
     secret: "My cat is cute",
     resave: false,
@@ -62,7 +62,6 @@ app.use(function(req, res, next) {
     res.locals.success = req.flash("success");
     next();
 });
-app.locals.moment = require("moment");
 
 // Using All the templates of the routes
 app.use("/campgrounds",campgroundRoutes);

@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
-const middleware = require("../middleware");
-const Campground = require("../models/campground");
+var middleware = require("../middleware");
+var Campground = require("../models/campground");
 
 // Geocoder
 var NodeGeocoder = require('node-geocoder');
