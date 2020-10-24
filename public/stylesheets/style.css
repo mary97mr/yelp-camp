@@ -66,3 +66,7 @@ label {
     margin-top: 5px;
     color: gray;
 }
+
+.checked {
+    color: rgb(218, 153, 33);
+}

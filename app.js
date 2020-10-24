@@ -35,6 +35,7 @@ var User       = require("./models/user");
 // Requiring All Routes
 var campgroundRoutes = require("./routes/campgrounds");
 var commentRoutes    = require("./routes/comments");
+var reviewRoutes     = require("./routes/reviews");
 var indexRoutes      = require("./routes/index");
 var seedDB           = require("./seeds");
 
@@ -66,6 +67,7 @@ app.use(function(req, res, next) {
 // Using All the templates of the routes
 app.use("/campgrounds",campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
+app.use("/campgrounds/:id/reviews", reviewRoutes);
 app.use(indexRoutes);
 
 // Listen Port Route
