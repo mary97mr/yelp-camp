@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 var express = require("express");
-var app = express();
+var app     = express();
 
 var methodOverride = require("method-override");
 app.use(methodOverride("_method"));
@@ -21,25 +21,26 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.locals.moment = require("moment");
 
-var passport = require("passport");
+var passport      = require("passport");
 var LocalStrategy = require("passport-local");
-var flash = require("connect-flash");
+var flash         = require("connect-flash");
 
 // Requiring Models
-var Campground = require("./models/campground");
-var Comment = require("./models/comment");
-var User = require("./models/user");
+var Campground   = require("./models/campground");
+var Comment      = require("./models/comment");
+var User         = require("./models/user");
 var Notification = require("./models/user");
 
 // Requiring All Routes
 var campgroundRoutes = require("./routes/campgrounds");
-var commentRoutes = require("./routes/comments");
-var indexRoutes = require("./routes/index");
-var seedDB = require("./seeds");
+var commentRoutes    = require("./routes/comments");
+var reviewRoutes     = require("./routes/reviews");
+var indexRoutes      = require("./routes/index");
+var seedDB           = require("./seeds");
 
 // PASSPORT CONFIGURATION
-
 app.use(require("express-session")({
     secret: "My cat is cute",
     resave: false,
@@ -74,11 +75,10 @@ app.use(async function(req, res, next) {
     next();
 });
 
-app.locals.moment = require("moment");
-
 // Using All the templates of the routes
 app.use("/campgrounds",campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
+app.use("/campgrounds/:id/reviews", reviewRoutes);
 app.use(indexRoutes);
 
 // Listen Port Route

@@ -4,6 +4,8 @@ var middleware = require("../middleware");
 var Campground = require("../models/campground");
 var User = require("../models/user");
 var Notification = require("../models/notification");
+var Comment = require("../models/comment");
+var Review = require("../models/review");
 
 // Geocoder
 var NodeGeocoder = require('node-geocoder');
@@ -34,6 +36,7 @@ var upload = multer({ storage: storage, fileFilter: imageFilter})
 
 // cloudinary
 var cloudinary = require('cloudinary');
+const review = require("../models/review");
 cloudinary.config({ 
   cloud_name: 'mary97mr', 
   api_key: process.env.CLOUDINARY_API_KEY, 
@@ -129,7 +132,10 @@ router.post("/", middleware.isLoggedIn, upload.single("img"), function(req, res)
 
 router.get("/:id", function(req, res) {
     // find the campground with provided ID
-    Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground) {
+    Campground.findById(req.params.id).populate("comments").populate({
+        path: "reviews",
+        options: {sort: {createdAt: -1}}
+    }).exec(function(err, foundCampground) {
         if(err || !foundCampground) {
             req.flash("error", "Campground not found");
             res.redirect("back");
@@ -154,6 +160,7 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, function(req, res) 
 // UPDATE - Updates that specific campground edit
 
 router.put("/:id", middleware.checkCampgroundOwnership, upload.single('img'), function(req, res) {
+    delete req.body.campground.rating;
     Campground.findById(req.params.id, async function(err, campground) {
         if(err) {
             req.flash("error", err.message);
@@ -203,9 +210,14 @@ router.delete("/:id", middleware.checkCampgroundOwnership, function(req, res) {
         }
         try {
             await cloudinary.v2.uploader.destroy(campground.imgId);
+            // deletes all comments associated with the campground
+            await Comment.remove({"_id": {$in: campground.comments}});
+            // deletes all reviews associated with the campground
+            await Review.remove({"_id": {$in: campground.review}});
+            //  delete the campground
             campground.remove();
             req.flash("success", "Campground deleted successfully");
-            res.redirect("/campgrounds")
+            res.redirect("/campgrounds");
         }
         catch(err) {
             req.flash("error", err.message);
