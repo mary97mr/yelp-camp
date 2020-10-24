@@ -39,8 +39,29 @@
 							<a class="<%= typeof page !== 'undefined' && page === 'register' ? 'active' : '' %> nav-link" href="/register">Sign Up</a>
 						</li>
 					<% } else {%>
-						<li class="nav-item"><a class="nav-link" href="#">Signed In as <%= currentUser.username %></a></li>
-						<li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle nav-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Notifications <%= notifications.length %> 
+							</a>
+							<ul class="dropdown-menu">
+								<li class="p-2 m-auto">
+									<a class="dropdown-item" href="/notifications">View past notifications</a>
+								</li>
+								<% notifications.forEach(function(notification) { %> 
+									<li>
+										<a class="dropdown-item" href="/notifications/<%= notification.id %>">
+											<%=notification.username %> created a new post
+										</a>
+									</li>
+								<% }); %> 
+							</ul>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">Signed In as <%= currentUser.username %></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/logout">Logout</a>
+						</li>
 					<% } %> 
 				</ul>
 			</div>

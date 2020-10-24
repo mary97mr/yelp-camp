@@ -1,0 +1,20 @@
+<%- include("../partials/header") %>
+<div class="row">
+    <div class="col"></div>
+    <div class="col-md-8 form-style">
+        <h1 class="form-header mt-3">Notifications</h1>
+        <div class="m-3">
+            <% allNotifications.forEach(function(notification) { %>
+                <li>
+                    <a href="/campgrounds/<%= notification.campgroundId %>">
+                         <%= notification.username %> created a new campground.
+                    </a>
+                </li>
+            <% }); %> 
+        </div>
+        <a class="m-3" href="/campgrounds">Go back</a>
+    </div>
+    <div class="col"></div>
+</div>
+
+<%- include("../partials/footer") %> 

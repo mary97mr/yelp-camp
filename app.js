@@ -17,7 +17,7 @@ mongoose.connect('mongodb://localhost/yelp_camp', {
 .catch(err => console.log(err.message));
 
 var bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -28,9 +28,10 @@ var LocalStrategy = require("passport-local");
 var flash         = require("connect-flash");
 
 // Requiring Models
-var Campground = require("./models/campground");
-var Comment    = require("./models/comment");
-var User       = require("./models/user");
+var Campground   = require("./models/campground");
+var Comment      = require("./models/comment");
+var User         = require("./models/user");
+var Notification = require("./models/user");
 
 // Requiring All Routes
 var campgroundRoutes = require("./routes/campgrounds");
@@ -57,8 +58,18 @@ passport.deserializeUser(User.deserializeUser());
 // seedDB(); //seed database
 
 // Passing variables to all the templates
-app.use(function(req, res, next) {
+app.use(async function(req, res, next) {
     res.locals.currentUser = req.user;
+    if(req.user){
+        try {
+            let user = await User.findById(req.user._id).populate("notifications", null, {isRead: false}).exec();
+            res.locals.notifications = user.notifications.reverse();
+        }
+        catch(err) {
+            req.flash("error", err.message);
+            res.redirect("back");
+        }
+    }
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
     next();

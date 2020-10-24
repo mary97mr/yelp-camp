@@ -67,6 +67,12 @@ label {
     color: gray;
 }
 
+.follow {
+    border-radius: 10px;
+    background-color: #669999;
+    color: white;
+}
+
 .checked {
     color: rgb(218, 153, 33);
 }

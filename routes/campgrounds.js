@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 var middleware = require("../middleware");
 var Campground = require("../models/campground");
+var User = require("../models/user");
+var Notification = require("../models/notification");
 var Comment = require("../models/comment");
 var Review = require("../models/review");
 
@@ -17,7 +19,6 @@ var geocoder = NodeGeocoder(options);
 
 // multer
 var multer = require('multer');
-
 var storage = multer.diskStorage({
   filename: function(req, file, callback) {
     callback(null, Date.now() + file.originalname);
@@ -31,7 +32,6 @@ var imageFilter = function (req, file, cb) {
     }
     cb(null, true);
 };
-
 var upload = multer({ storage: storage, fileFilter: imageFilter})
 
 // cloudinary
@@ -48,7 +48,7 @@ cloudinary.config({
 router.get("/", function(req, res) {
     var noMatch = null;
     if(req.query.search) {
-        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        var regex = new RegExp(escapeRegex(req.query.search), 'gi');
         Campground.find({name: regex}, function(err, allCampgrounds){
             if(err) {
                 console.log(err);
@@ -78,21 +78,26 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
 
 // CREATE - Adds new campground to the database
 
-router.post("/", middleware.isLoggedIn, upload.single('img'), function(req, res) {
-    cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
-        if(err) {
-            req.flash("error", err.message);
-            return res.redirect("back");
+router.post("/", middleware.isLoggedIn, upload.single("img"), function(req, res) {
+    geocoder.geocode(req.body.location, function (err, data) {
+        if (err || data.status === 'ZERO_RESULTS') {
+            req.flash('error', 'Invalid address, try typing a new address');
+            return res.redirect('back');	
         }
-        geocoder.geocode(req.body.location, function (err, data) {
-            if (err || !data.length) {
-                console.log(err)
-                req.flash("error", "Invalid address");
-                return res.redirect("back");
-            }
-            req.body.campground.lat = data[0].latitude;
-            req.body.campground.lng = data[0].longitude;
-            req.body.campground.location = data[0].formattedAddress;
+        //Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
+        if (err || data.status === 'REQUEST_DENIED') {
+            req.flash('error', 'Something Is Wrong Your Request Was Denied');
+        }
+        // Error handling provided by google docs -https://developers.google.com/places/web-service/autocomplete 
+        if (err || data.status === 'OVER_QUERY_LIMIT') {
+                req.flash('error', 'All Requests Used Up');
+                return res.redirect('back');
+        }
+        req.body.campground.lat = data[0].latitude;
+        req.body.campground.lng = data[0].longitude;
+        req.body.campground.location = data[0].formattedAddress;
+
+        cloudinary.v2.uploader.upload(req.file.path, async function(err, result) {
             // add cloudinary url for the image to the campground object under image property
             req.body.campground.img = result.secure_url;
             req.body.campground.imgId = result.public_id;
@@ -101,15 +106,24 @@ router.post("/", middleware.isLoggedIn, upload.single('img'), function(req, res)
                 id : req.user._id,
                 username: req.user.username
             }
-            Campground.create(req.body.campground, function(err, newlyCreated) {
-                if (err) {
-                    req.flash("error", err.message);
-                    return res.redirect("back");
-                } else {
-                    req.flash("success", "Successfully created a new campground");
-                    res.redirect("/campgrounds/" + newlyCreated.id);
-                }      
-            });
+            try {
+                let campground = await Campground.create(req.body.campground);
+                let user = await User.findById(req.user._id).populate("followers").exec();
+                let newNotification = { 
+                    username: req.user.username, 
+                    campgroundId: campground.id
+                }
+                for(const follower of user.followers) {
+                    let notification = await Notification.create(newNotification);
+                    follower.notifications.push(notification);
+                    follower.save();
+                }
+                res.redirect("/campgrounds/" + campground.id);
+            }
+            catch(err) {
+                req.flash("error", err.message);
+                res.redirect("back");
+            }
         });  
     });
 });

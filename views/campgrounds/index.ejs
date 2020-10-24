@@ -8,11 +8,9 @@
         <hr>
         <p>
             <form action="/campgrounds" method="GET" class="form-inline">
-                <div class="form-group">
-                    <input class="form-control mr-2" type="text" name="search" placeholder="Campground search">
-                    <br>
-                    <input type="submit" value="Search" class="btn btn-secondary ">
-                </div> 
+                <input class="form-control mr-2" type="text" name="search" placeholder="Campground search">
+                <br>
+                <input type="submit" value="Search" class="btn btn-secondary ">
             </form>
             <% if(noMatch !== null) { %>
                 <p class="text-muted mt-2"><%= noMatch %></p>
