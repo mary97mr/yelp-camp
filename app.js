@@ -65,7 +65,8 @@ app.use(async function(req, res, next) {
             res.locals.notifications = user.notifications.reverse();
         }
         catch(err) {
-            console.log(err.message);
+            req.flash("error", err.message);
+            res.redirect("back");
         }
     }
     res.locals.error = req.flash("error");

@@ -3,7 +3,7 @@ var router = express.Router();
 var middleware = require("../middleware");
 var Campground = require("../models/campground");
 var User = require("../models/user");
-var Notification = require("../models/user");
+var Notification = require("../models/notification");
 
 // Geocoder
 var NodeGeocoder = require('node-geocoder');
@@ -106,23 +106,18 @@ router.post("/", middleware.isLoggedIn, upload.single("img"), function(req, res)
             try {
                 let campground = await Campground.create(req.body.campground);
                 let user = await User.findById(req.user._id).populate("followers").exec();
-                console.log("checkpoint 1")
                 let newNotification = { 
                     username: req.user.username, 
                     campgroundId: campground.id
                 }
-                console.log("checkpoint 2")
                 for(const follower of user.followers) {
-                    console.log("checkpoint 3") // this is printed out
                     let notification = await Notification.create(newNotification);
-                    console.log("checkpoint 4") // it doesn't get to this line
                     follower.notifications.push(notification);
                     follower.save();
                 }
                 res.redirect("/campgrounds/" + campground.id);
             }
             catch(err) {
-                console.log(err)
                 req.flash("error", err.message);
                 res.redirect("back");
             }
