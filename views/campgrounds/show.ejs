@@ -86,29 +86,93 @@
 
         <!--Comment section-->
         <div class="card bg-light mt-3 mb-3">
+            <!--Setting up the add new comment button that is used for collapsing-->
             <div class="text-right m-3">
-                <a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new ">Add new comment</a>
+                <a class="btn btn-success" data-toggle="collapse" href="#collapseComment" role="button" aria-expanded="false" aria-controls="collapseComment"><i class="fas fa-plus"></i> Add new comment</a>
             </div>
-            <hr class="mt-0">
+            <!--Comment section title-->
+            <div class="m-auto"><h5><strong>Comments <i class="fas fa-comment-alt"></i></strong></h5></div>
+            <!--Collapse Add a comment form START-->
+            <div class="collapse" id="collapseComment">
+                <div class="card card-body m-auto card-comment">
+                    <% if(!currentUser) { %>
+                        <h5>You need to login before you can comment. <a href="/login">Click here </a>to go to the login page.</h5>
+                    <% } %>
+                    <% if(currentUser) { %>
+                        <p class="card-title">Write your comment. <i class="fas fa-pen"></i></p>
+                        <form id="add-comment-form" action="/campgrounds/<%= campground._id %>/comments" method="POST">
+                            <div class="form-group">
+                                <input class="form-control" type="text" disabled value="<%= currentUser.username %> ">
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="Comment text." cols="70" rows="5" form="add-comment-form" name="comment[text]" ></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success btn-sm">Comment <i class="fas fa-comment-alt"></i></button>
+                            </div>
+                        </form>
+                    <% } %>
+                </div>
+            </div>
+            <!--Collapse Add a comment form END-->
+            <hr>
+            <% if(campground.comments.length === 0) { %>
+                <p class="m-auto pb-3" style="color:gray;">No commments yet.</p>
+            <% } %> 
+
+             <!--Display comments by looping through them-->
             <% campground.comments.forEach(function(comment) { %>
                 <div class="row m-2">
                     <div class="col-md-12">
                         <div class="d-flex justify-content-between">
-                            <strong><%= comment.author.username %></strong>
+                            <strong>
+                                <% if(currentUser && currentUser._id.equals(comment.author.id)) { %>
+                                    <i style="color:orange; font-size: 18px;" class="fas fa-user m-0"></i>
+                                <% } else { %>
+                                    <i style="color:grey; font-size: 18px;" class="fas fa-user m-0"></i>
+                                <% } %>
+                                <!--Print out the author username-->
+                                <%= comment.author.username %>
+                            </strong>
+                            <!--Show when the comment was made-->
                             <span><%= moment(comment.createdAt).fromNow()%></span>
                         </div>
-                        <p><%= comment.text %></p>
-                        <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %> 
-                            <a class="btn btn-sm btn-warning" href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit ">Edit</a>
+                        <!--Printing the comment-->
+                        <p class="my-3"><%= comment.text %></p>
+                        
+                        <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
+                            <!--Edit button used for collapsing the edit comment form-->
+                            <a class="btn btn-sm btn-warning" role="button" data-toggle="collapse" href="#collapseEdit<%= comment._id %>" aria-expanded="false" aria-controls="collapse<%= comment._id %>"> Edit</a>
+
+                            <!--Delete comment button-->
                             <form class="delete-form" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
                                 <button class="btn btn-sm btn-danger">Delete</button>
                             </form>
-                            <hr>
-                        <% } %> 
+
+                            <!--Edit comment form-->
+                            <div class="collapse pt-3" id="collapseEdit<%= comment._id %>">
+                                <div class="card card-body m-auto" style="border-left: 5px solid #ffbb33;">
+                                    <p class="card-title">Edit your comment. <i class="fas fa-edit"></i></p>
+                                    <form id="edit-comment-form<%= comment._id %>" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=PUT" method="POST">
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" disabled value="<%= currentUser.username %> ">
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea class="form-control" cols="70" rows="5" form="edit-comment-form<%= comment._id %>" name="comment[text]"><%= comment.text %></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-success btn-sm"> Save <i class="fas fa-comment-alt"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        <% } %>
+                        <hr>
                     </div> 
                 </div>
             <% }); %> 
         </div>
+        <!--COMMENT SECTION END-->
     </div>
 </div>
 <script>

@@ -76,3 +76,8 @@ label {
 .checked {
     color: rgb(218, 153, 33);
 }
+
+.card-comment {
+    border-left: 5px solid #1ca051;
+    width: 90%;
+}
