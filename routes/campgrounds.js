@@ -43,29 +43,51 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// INDEX- Show all campgrounds
+// Define escapeRegex function for search feature
+function escapeRegex(text) {
+    return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
 
+// INDEX- Show all campgrounds
 router.get("/", function(req, res) {
+    var perPage = 6; //Max number of posts per page.
+    var pageQuery = parseInt(req.query.page); //Current page(number).
+    var pageNumber = pageQuery ? pageQuery : 1; //Current page(number).
     var noMatch = null;
     if(req.query.search) {
-        var regex = new RegExp(escapeRegex(req.query.search), 'gi');
-        Campground.find({name: regex}, function(err, allCampgrounds){
-            if(err) {
-                console.log(err);
-            } else {
-                if(allCampgrounds.length < 1) {
-                    noMatch = "No campgrounds match that query, please try again"
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        Campground.find({name: regex}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allCampgrounds) {
+            Campground.count().exec(function(err, count) {
+                if(err) {
+                    console.log(err);
+                    res.redirect("back");
+                } else {
+                    if(allCampgrounds.length < 1) {
+                        noMatch = "No campgrounds match that query, please try again"
+                    }
+                    res.render("campgrounds/index", {campgrounds:allCampgrounds, page: 'campgrounds', noMatch: noMatch, pages: Math.ceil(count/perPage), current: pageNumber});
                 }
-                res.render("campgrounds/index", {campgrounds:allCampgrounds, page: 'campgrounds', noMatch: noMatch});
-            }
+            });
         });
     } else {
-        Campground.find({}, function(err, allCampgrounds){
-            if(err) {
-                console.log(err);
-            } else {
-                res.render("campgrounds/index", {campgrounds:allCampgrounds, page: 'campgrounds', noMatch: noMatch});
-            }
+        // Find All campgrounds, sort it, skip and limit them.
+        // sort: put the last post as newest first.
+        Campground.find({}).sort({createdAt: - 1}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allCampgrounds) {
+            // Count all items in the collection.contDocuments()
+            Campground.countDocuments().exec(function(err, count) {
+                if(err) {
+                    console.log(err);
+                    res.redirect("back");
+                } else {
+                    res.render("campgrounds/index", {
+                        campgrounds: allCampgrounds,
+                        page: 'campgrounds',
+                        noMatch: noMatch,
+                        pages: Math.ceil(count/perPage), //Total num of pages.
+                        current: pageNumber
+                    });
+                }
+            });
         });
     }
 });
@@ -226,8 +248,5 @@ router.delete("/:id", middleware.checkCampgroundOwnership, function(req, res) {
     });
 });
 
-function escapeRegex(text) {
-    return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-}
 
 module.exports = router;
