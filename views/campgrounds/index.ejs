@@ -36,7 +36,8 @@
                             <i class="fas fa-star <% if (campground.rating > 4.5) { %> checked <% } %>"></i>
                         <% } %>
                     </div>
-                    <a href="/campgrounds/<%= campground._id %>" class="btn btn-info mt-3">More Info</a>
+                    <div style="font-size: 20px;" class="mt-2"><span class="badge badge-secondary"><i class="fas fa-thumbs-up"></i> <%= campground.likes.length %></span></div>
+                    <a href="/campgrounds/<%= campground._id %>" class="btn btn-info mt-2">More Info</a>
                 </div> 
             </div>
         </div>

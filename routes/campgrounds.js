@@ -154,7 +154,7 @@ router.post("/", middleware.isLoggedIn, upload.single("img"), function(req, res)
 
 router.get("/:id", function(req, res) {
     // find the campground with provided ID
-    Campground.findById(req.params.id).populate("comments").populate({
+    Campground.findById(req.params.id).populate("comments likes").populate({
         path: "reviews",
         options: {sort: {createdAt: -1}}
     }).exec(function(err, foundCampground) {
@@ -183,6 +183,7 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, function(req, res) 
 
 router.put("/:id", middleware.checkCampgroundOwnership, upload.single('img'), function(req, res) {
     delete req.body.campground.rating;
+    delete req.body.campground.likes;
     Campground.findById(req.params.id, async function(err, campground) {
         if(err) {
             req.flash("error", err.message);
@@ -240,6 +241,32 @@ router.delete("/:id", middleware.checkCampgroundOwnership, function(req, res) {
             campground.remove();
             req.flash("success", "Campground deleted successfully");
             res.redirect("/campgrounds");
+        }
+        catch(err) {
+            req.flash("error", err.message);
+            return res.redirect("back");
+        }
+    });
+});
+
+// CAMPGROUND LIKE ROUTE
+
+router.post("/:id/like", middleware.isLoggedIn, function(req, res) {
+    Campground.findById(req.params.id, async function(err, foundCampground) {
+        try {
+            // check if req.user._id exists in foundCampground.likes
+            var foundUserLike = await foundCampground.likes.some(function(like) {
+                return like.equals(req.user._id);
+            });
+            if (foundUserLike) {
+                // user already liked, removing like
+                foundCampground.likes.pull(req.user._id);
+            } else {
+                // adding the new user like
+                foundCampground.likes.push(req.user);
+            }
+            foundCampground.save()
+            return res.redirect("/campgrounds/" + foundCampground._id);
         }
         catch(err) {
             req.flash("error", err.message);

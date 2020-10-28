@@ -57,7 +57,7 @@
 							</ul>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">Signed In as <%= currentUser.username %></a>
+							<a class="nav-link" href="/users/<%= currentUser.id %>">Signed In as <span class=" badge badge-success"><%= currentUser.username %></span></a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="/logout">Logout</a>

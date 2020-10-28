@@ -14,6 +14,7 @@ var campgroundSchema = new mongoose.Schema({
         id: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
         username: String,
     },
+    likes: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
     comments: [{type: mongoose.Schema.Types.ObjectId, ref: "Comment"}],
     reviews: [{type: mongoose.Schema.Types.ObjectId, ref: "Review"}],
     rating: {
