@@ -6,37 +6,36 @@
         <p class="lead">View our hand-picked campgrounds from all over the world.</p>
         <a href="/campgrounds/new" class="btn btn-info btn-lg">Add New Campground</a>
         <hr>
-        <p>
-            <form action="/campgrounds" method="GET" class="form-inline">
-                <input class="form-control mr-2" type="text" name="search" placeholder="Campground search">
-                <br>
-                <input type="submit" value="Search" class="btn btn-secondary ">
-            </form>
-            <% if(noMatch !== null) { %>
-                <p class="text-muted mt-2"><%= noMatch %></p>
-            <% } %>
-        </p>
+        <form action="/campgrounds" method="GET" class="form-inline mt-2 mt-md-0">
+            <input class="form-control mr-2" type="text" name="search" placeholder="Search" style="width: 235px;">
+            <input type="submit" value="Search" class="btn btn-secondary my-2 my-sm-0">
+        </form>
+        <% if(noMatch !== null) { %>
+            <p class="text-muted mt-2"><%= noMatch %></p>
+        <% } %>
     </div>
 </header>
 <div class="row" >
     <% campgrounds.forEach(function(campground) { %> 
-        <div class="col-md-4 col-sm-6 mb-3">
+        <div class="col-md-4 mb-3">
             <div class="card text-center">
-                <img class="card-img-top img-fluid" src="<%= campground.img %>" alt="Responsive image">
+                <img class="card-img-top" src="<%= campground.img %>" alt="<%= campground.name %>">
                 <div class="card-body">
-                    <div>
-                        <h5 class="card-title"><%= campground.name %></h5>
-                        <% if(campground.rating === 0) { %> 
-                            <em>No reviews yet.</em>
-                        <% } else { %> 
+                    <h5 class="card-title">
+                        <%= campground.name %>
+                        <span class="badge badge-secondary" style="font-size: 12px;"><i class="fas fa-thumbs-up"></i> <%= campground.likes.length %></span>
+                    </h5>
+                    <% if(campground.rating === 0) { %> 
+                        <div><em>No reviews yet.</em></div>
+                    <% } else { %> 
+                        <div>
                             <i class="fas fa-star checked"></i>
                             <i class="fas fa-star <% if (campground.rating > 1.5) { %> checked <% } %>"></i>
                             <i class="fas fa-star <% if (campground.rating > 2.5) { %> checked <% } %>"></i>
                             <i class="fas fa-star <% if (campground.rating > 3.5) { %> checked <% } %>"></i>
                             <i class="fas fa-star <% if (campground.rating > 4.5) { %> checked <% } %>"></i>
-                        <% } %>
-                    </div>
-                    <div style="font-size: 20px;" class="mt-2"><span class="badge badge-secondary"><i class="fas fa-thumbs-up"></i> <%= campground.likes.length %></span></div>
+                        </div>
+                    <% } %>
                     <a href="/campgrounds/<%= campground._id %>" class="btn btn-info mt-2">More Info</a>
                 </div> 
             </div>

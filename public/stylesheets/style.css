@@ -6,12 +6,24 @@
     border-radius: 5px;
 }
 
+body {
+    background-color: #f0f5f5;
+}
+
+label {
+    margin-left: 5px;
+    color: #669999;
+    margin-bottom: 5px;
+}
+
+/* Style for the form signin/signup/newcomment*/
 .form-style {
     width: 100%;
     margin: 25px 10px;
     background-color: white;
     padding-bottom: 1.5rem;
     border-radius: 10px;
+    border: 1px solid rgba(0,0,0,.25);
 }
 
 .form-header, .form-comment {
@@ -30,29 +42,30 @@
     font-size: 1.3em;
 }
 
-body {
-    background-color: #f0f5f5;
+/* Show page: border card, delete button and style comment form*/
+.card {
+    border: 1px solid rgba(0,0,0,.25);
+}
+.delete-form {
+    display: inline;
+}
+.card-comment {
+    border-left: 5px solid #1ca051;
+    width: 90%;
+}
+/* Stars reviews color */
+.checked {
+    color: rgb(218, 153, 33);
 }
 
-label {
-    margin-left: 5px;
-    color: #669999;
-    margin-bottom: 5px;
-}
+/* Profile user: follow button and text*/
 
 .info-pro {
     font-family: 'Roboto Mono', monospace;
     color: #669999;
 }
 
-.card {
-    border: 1px solid rgba(0,0,0,.25);
-}
-
-.delete-form {
-    display: inline;
-}
-
+/* Icons fontawesome signin and logout */
 .fa-user, .fa-lock, .fa-at, .fa-envelope {
     font-size: 1.8em;
     margin-right: 25px;
@@ -65,19 +78,4 @@ label {
     margin-right: 22px;
     margin-top: 5px;
     color: gray;
-}
-
-.follow {
-    border-radius: 10px;
-    background-color: #669999;
-    color: white;
-}
-
-.checked {
-    color: rgb(218, 153, 33);
-}
-
-.card-comment {
-    border-left: 5px solid #1ca051;
-    width: 90%;
 }

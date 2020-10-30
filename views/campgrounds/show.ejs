@@ -1,12 +1,7 @@
 <%- include("../partials/header") %> 
 
 <div class="row">
-    <div class="col-md-3 col-lg-">
-        <ul class="list-group">
-            <li class="list-group-item active">Info 1</li>
-            <li class="list-group-item">Info 2</li>
-            <li class="list-group-item">Info 3</li>
-        </ul>
+    <div class="col-md-3">
         <div class="mb-3" id="map"></div>
     </div>
     <div class="col-md-9">
@@ -25,7 +20,7 @@
                                     <% if(currentUser && campground.likes.some(function(like){  return like.equals(currentUser._id)  })) { %>
                                         <button class="btn btn-sm btn-primary"><i class="fas fa-thumbs-up"></i> Liked (<%= campground.likes.length %>)</button>
                                     <% } else { %>
-                                        <button class="btn btn-sm btn-secondary"><i class="fas fa-thumbs-up"></i> Like (<%= campground.likes.length %>)</button>
+                                        <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-thumbs-up"></i> Like </button>
                                     <% } %>
                                 </div>
                             </form>
@@ -90,7 +85,7 @@
         <!--Review section-->
         <div class="card bg-light mt-3 mb-3">
             <% if(campground.rating === 0) { %>
-                <h5 class="m-3"><em>No reviews yet.</em></h5>
+                <p class="m-3" style="color:gray;">No reviews yet.</p>
             <% } else { %>
                 <div class="m-3">
                     <div class="d-flex justify-content-between">
