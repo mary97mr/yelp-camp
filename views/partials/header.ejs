@@ -20,30 +20,34 @@
         <title>YelpCamp</title>
     </head>
     <body>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
-			<a class="navbar-brand" href="/">YelpCamp</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+			<a class="navbar-brand" href="/"><i class="fas fa-tree"></i> YelpCamp</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
 			</button>
-			<div class="collapse navbar-collapse flex-row-reverse" id="navbarNav">
-				<ul class="nav navbar-nav">
+			<div class="collapse navbar-collapse my-auto" id="navbarNav">
+				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
 						<a class="<%= typeof page !== 'undefined' && page === 'campgrounds' ? 'active' : '' %> nav-link" href="/campgrounds">Home</a>
 					</li>
 				</ul>
-				<ul class="nav navbar-nav">
+				<ul class="navbar-nav">
 					<% if(!currentUser) { %>
 						<li class="nav-item">
-							<a class="<%= typeof page !== 'undefined' && page === 'login' ? 'active' : '' %> nav-link" href="/login">Login</a>
+							<a class="<%= typeof page !== 'undefined' && page === 'login' ? 'active' : '' %> nav-link  py-auto" href="/login">Login</a>
 						</li>
 						<li class="nav-item">
-							<a class="<%= typeof page !== 'undefined' && page === 'register' ? 'active' : '' %> nav-link" href="/register">Sign Up</a>
+							<a class="<%= typeof page !== 'undefined' && page === 'register' ? 'active' : '' %> nav-link " href="/register">Sign Up</a>
 						</li>
 					<% } else {%>
+						<li class="nav-item">
+							<a class="nav-link" href="/users/<%= currentUser.id %>"><span class="badge badge-success p-2"><i style="color:white; font-size: 12px;" class="fas fa-user m-0 pr-2"></i><%= currentUser.username %></span></a>
+						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle nav-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Notifications <%= notifications.length %> 
+								Notifications <span class="badge badge-light"><%= notifications.length %></span> 
 							</a>
-							<ul class="dropdown-menu">
+							<ul class="dropdown-menu dropdown-menu-right"  aria-labelledby="dropdownMenuLink">
 								<li class="p-2 m-auto">
 									<a class="dropdown-item" href="/notifications">View past notifications</a>
 								</li>
@@ -55,9 +59,6 @@
 									</li>
 								<% }); %> 
 							</ul>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/users/<%= currentUser.id %>">Signed In as <span class=" badge badge-success"><%= currentUser.username %></span></a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="/logout">Logout</a>

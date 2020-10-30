@@ -210,14 +210,13 @@ router.post("/reset/:token", function(req, res) {
 router.get("/users/:id", async function(req, res) {
     try {
         let user = await User.findById(req.params.id).populate("followers").exec();
-        Campground.find().where("author.id").equals(user._id).exec(function(err, campground){
+        Campground.find().where("author.id").equals(user._id).exec(function(err, campgrounds){
             if(err){
                 req.flash("error", "Something went wrong");
                 res.redirect("/campgrounds");
             }
-            res.render("users/show", {user, campground});
-        });	
-        
+            res.render("users/show", {user, campgrounds});
+        });
     }
     catch(err) {
         req.flash("error", err.message);
@@ -226,18 +225,30 @@ router.get("/users/:id", async function(req, res) {
 });
 
 // follow user
-router.get("/follow/:id", middleware.isLoggedIn, async function(req, res) {
-    try {
-        let user = await User.findById(req.params.id);
-        user.followers.push(req.user._id);
-        user.save();
-        req.flash("success", "Successfully followed " + user.username + "!");
-        res.redirect("/users/" + req.params.id);
-    }
-    catch(err) {
-        req.flash("error", err.message);
-        res.redirect("back");
-    }
+router.get("/follow/:id", middleware.isLoggedIn, function(req, res) {
+    User.findById(req.params.id, async function(err, foundUser) {
+        try {
+            // check if req.user._id exists in user.followers
+            var foundUserFollower = foundUser.followers.some(function(follower) {
+                return follower.equals(req.user._id);
+            });
+            if (foundUserFollower) {
+                // user already followed, removing follower
+                foundUser.followers.pull(req.user._id);
+            } else {
+                // adding the new user follower
+                foundUser.followers.push(req.user);
+
+            }
+            foundUser.save();
+            res.redirect("/users/" + req.params.id);
+        }
+        catch(err) {
+            console.log(err)
+            req.flash("error", err.message);
+            res.redirect("back");
+        }
+    });
 });
 
 // view all notifications
@@ -257,7 +268,6 @@ router.get("/notifications", middleware.isLoggedIn, async function(req, res) {
 });
 
 // handle notifications
-
 router.get("/notifications/:id", middleware.isLoggedIn, async function(req, res) {
     try {
         let notification = await Notification.findById(req.params.id);
