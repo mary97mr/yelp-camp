@@ -19,7 +19,7 @@
     <% campgrounds.forEach(function(campground) { %> 
         <div class="col-md-4 mb-3">
             <div class="card text-center">
-                <img class="card-img-top" src="<%= campground.img %>" alt="<%= campground.name %>">
+                <img class="card-img-top" src="<%= campground.img %>" alt="<%= campground.name %>" style="min-height: 255px;">
                 <div class="card-body">
                     <h5 class="card-title">
                         <%= campground.name %>
