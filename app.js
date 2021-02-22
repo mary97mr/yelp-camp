@@ -42,16 +42,7 @@ var reviewRoutes     = require("./routes/reviews");
 var indexRoutes      = require("./routes/index");
 var seedDB = require("./seeds");
 
-const session = require("express-session");
-const MongoStore = require('connect-mongo')(session);
-var store = new MongoStore({
-    url: dbUrl,
-    secret,
-    touchAfter: 24 * 60 * 60
-});
-store.on("error", function (e) {
-    console.log("SESSION STORE ERROR", e)
-})
+var session = require("express-session");
 // SESSION CONFIG
 var sessionConfig = {
     store,
