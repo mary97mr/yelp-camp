@@ -45,7 +45,6 @@ var seedDB = require("./seeds");
 var session = require("express-session");
 // SESSION CONFIG
 var sessionConfig = {
-    store,
     name: "session",
     secret,
     resave: false,
