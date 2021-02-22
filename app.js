@@ -40,11 +40,10 @@ var campgroundRoutes = require("./routes/campgrounds");
 var commentRoutes    = require("./routes/comments");
 var reviewRoutes     = require("./routes/reviews");
 var indexRoutes      = require("./routes/index");
-var seedDB           = require("./seeds");
+var seedDB = require("./seeds");
 
-var session = require("express-session");
-var MongoStore = require("connect-mongo")(session);
-
+const session = require("express-session");
+const MongoStore = require('connect-mongo')(session);
 var store = new MongoStore({
     url: dbUrl,
     secret,
