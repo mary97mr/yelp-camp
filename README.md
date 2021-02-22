@@ -35,6 +35,10 @@ nodemon app.js
 sudo systemctl status mongod
 ```
 
+### Try it on heroku:
+
+https://yelp-camp-mary97mr.herokuapp.com/
+
 ## Watch the main features: 
 
 <a href="https://www.youtube.com/embed/a649jKlby2s" target="_blank"><img src="https://img.youtube.com/vi/a649jKlby2s/0.jpg" 
