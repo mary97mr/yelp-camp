@@ -35,7 +35,7 @@ nodemon app.js
 sudo systemctl status mongod
 ```
 
-### Try it on heroku:
+## Try it on heroku:
 
 https://yelp-camp-mary97mr.herokuapp.com/
 
