@@ -9,7 +9,7 @@ app.use(methodOverride("_method"));
 var mongoose = require("mongoose");
 var dbUrl = process.env.DB_URL || 'mongodb://localhost/yelp_camp';
 var secret = process.env.SECRET || "thisshouldbeabettersecret";
-mongoose.connect(db, {
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
